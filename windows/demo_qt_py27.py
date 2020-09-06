@@ -4,6 +4,15 @@ import time
 from threading import Thread
 import random
 
+def rejectExternal(event):
+    if event.spontaneous():
+        event.ignore()
+        # not rejecting. wtf?
+        print("spontaneous event ignored!")
+    else:
+        event.accept()
+        print("internal event accepted!")
+
 class Example(QtGui.QWidget):
 
     def __init__(self):
@@ -27,11 +36,18 @@ class Example(QtGui.QWidget):
     def test(self):
         print "show the position of mouse cursor in screen resolution: x is ?? , y is ??"
 
+    def mousePressEvent(self, QMouseEvent):
+        print 'press: (', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        rejectExternal(QMouseEvent)
+
     def mouseReleaseEvent(self, QMouseEvent):
-        print '(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        print 'release: (', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        rejectExternal(QMouseEvent)
 
     def mouseMoveEvent(self, QMouseEvent):
         print 'moving!: ','(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        print 'isSpontaneous: ',QMouseEvent.spontaneous()
+        rejectExternal(QMouseEvent)
 
 def some_args(window,mainWindow):
     time.sleep(2)

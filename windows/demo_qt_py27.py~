@@ -4,6 +4,14 @@ import time
 from threading import Thread
 import random
 
+def rejectExternal(event):
+    if event.spontaneous():
+        event.ignore()
+        print("spontaneous event ignored!")
+    else:
+        event.accept()
+        print("internal event accepted!")
+
 class Example(QtGui.QWidget):
 
     def __init__(self):
@@ -27,21 +35,29 @@ class Example(QtGui.QWidget):
     def test(self):
         print "show the position of mouse cursor in screen resolution: x is ?? , y is ??"
 
+    def mousePressEvent(self, QMouseEvent):
+        print 'press: (', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        rejectExternal(QMouseEvent)
+
     def mouseReleaseEvent(self, QMouseEvent):
-        print '(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        print 'release: (', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        rejectExternal(QMouseEvent)
 
     def mouseMoveEvent(self, QMouseEvent):
         print 'moving!: ','(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
+        print 'isSpontaneous: ',QMouseEvent.spontaneous()
+        rejectExternal(QMouseEvent)
 
 def some_args(window,mainWindow):
     time.sleep(2)
     rng = random.SystemRandom()
-    def width(): rng.choice(range(1024))
-    def height(): rng.choice(range(768))
+    def width(): return rng.choice(range(1024))
+    def height(): return rng.choice(range(768))
     print "thread_waiting_finished!"
     while True:
         # exception found.
-        point = QtCore.QPoint(width(),height())
+        info = (width(),height())
+        point = QtCore.QPoint(*info)
         print "Random moving destination",point
         event = QtGui.QMouseEvent(QtCore.QEvent.MouseMove,point,QtCore.Qt.NoButton,QtCore.Qt.MouseButtons(),QtCore.Qt.KeyboardModifiers())
         window.sendEvent(mainWindow,event)
