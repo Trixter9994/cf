@@ -38,16 +38,31 @@ class Example(QtGui.QWidget):
 
     def mousePressEvent(self, QMouseEvent):
         print 'press: (', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
-        rejectExternal(QMouseEvent)
+        if not QMouseEvent.spontaneous():
+            print("internal event accepted!")
+            super(Example,self).mousePressEvent(QMouseEvent)
+        else:
+            print("spontaneous event ignored!")
+            pass
 
     def mouseReleaseEvent(self, QMouseEvent):
         print 'release: (', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
-        rejectExternal(QMouseEvent)
+        if not QMouseEvent.spontaneous():
+            print("internal event accepted!")
+            super(Example,self).mouseReleaseEvent(QMouseEvent)
+        else:
+            print("spontaneous event ignored!")
+            pass
 
     def mouseMoveEvent(self, QMouseEvent):
         print 'moving!: ','(', QMouseEvent.x(), ', ', QMouseEvent.y(), ')',time.time()
         print 'isSpontaneous: ',QMouseEvent.spontaneous()
-        rejectExternal(QMouseEvent)
+        if not QMouseEvent.spontaneous():
+            print("internal event accepted!")
+            super(Example,self).mouseMoveEvent(QMouseEvent)
+        else:
+            print("spontaneous event ignored!")
+            pass
 
 def some_args(window,mainWindow):
     time.sleep(2)
