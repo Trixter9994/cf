@@ -3,7 +3,7 @@ from PyQt4 import QtGui, QtCore
 import time
 from threading import Thread
 import random
-
+'''
 def rejectExternal(event):
     if event.spontaneous():
         event.ignore()
@@ -12,7 +12,7 @@ def rejectExternal(event):
     else:
         event.accept()
         print("internal event accepted!")
-
+'''
 class Example(QtGui.QWidget):
 
     def __init__(self):
