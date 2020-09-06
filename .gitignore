@@ -1,0 +1,112 @@
+*.
+*.db
+**/*.db
+*.*
+!*.service
+!*/*.service
+!**/*.service
+*/.git
+**/__pycache__
+*.txt
+*.pdf
+*.log
+*~
+GeneralUsageLister/MainIndex/*
+!*/*.ipynb
+.*
+**/.git
+!*.m
+!*.az
+!.git
+!.pro
+!.mm
+!.f90
+!.jl
+!.lisp
+!.gitinnore
+!requirements*
+!lazero.png
+!lazer.png
+!symbol.png
+!*.ipynb
+!*/.gitignore
+!*/*.py
+!*/*.cmd
+!*/*.sh
+!*/*.gpickle
+!*/*.md
+!*/*.php
+!*/*.java
+!*/*.asm
+!*/*.cs
+!*/*.go
+!*/*.r
+!*/*.json
+!*/*.reg
+!*/*.ps1
+!*/*.lua
+!*.lua
+!*.mm
+!*.agda
+!*/*.lisp
+!*.scm
+!*/*.c
+!*/*.h
+!*/*.js
+!*/*.hs
+!*/*.bat
+!*/*.rb
+!*/*.cpp
+!*/*.awk
+!*/*.hpp
+!*/[Dd]ocker[Ff]ile
+!*/README
+!*/NETWORK
+!*/LICENSE
+!.gitignore
+!.git
+!*.py
+!*.cmd
+!*.sh
+!*.gpickle
+!*.md
+!*.php
+!*.java
+!*.asm
+!*.cs
+!*.go
+!*.r
+!*.json
+!*.reg
+!*.bat
+!*.ps1
+!*.lua
+!*.lisp
+!*.c
+!*.awk
+!*.h
+!*.js
+!*.hs
+!*.rb
+!*.cpp
+!*.hpp
+![Dd]ocker[Ff]ile
+!README
+!NETWORK
+!LICENSE
+# this will be incomplete.
+# but i believe it will survive after all.
+# really?
+# might be incompatible.
+# things will be way too damn big.
+# create file as you go?
+# what is permission denied?
+# speak your language.
+# speak!
+# you will find shits happening, along with your miserable shits.
+# this is the most glorious complier I have ever made.
+# this is the motherfucking natural language complier!
+# what does the most things? you want to read manual, but the manual gives you nothing!
+# you want some programs? solid standalone shits running even without the prick?
+# if you want something like that, I'd appreciate.
+# call it byteserver?
