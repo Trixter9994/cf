@@ -1,2 +1,1 @@
-# cf
-The Comprehension Framework
+# The Comprehension Framework
