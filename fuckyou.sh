@@ -2,4 +2,4 @@
 #./merge_submodules.sh
 git add . 
 git commit -m "fuck" 
-git push origin master
+git push origin HEAD:master
