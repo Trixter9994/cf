@@ -22,7 +22,8 @@ class Example(QtGui.QWidget):
         self.initUI()
 
     def initUI(self):               
-
+        x, y = -99999,-99999 # hard core tricks? also vanish from the command palette!
+#        x, y = 0, 0
         qbtn = QtGui.QPushButton('Quit', self)
         #qbtn.clicked.connect(QtCore.QCoreApplication.instance().quit)
         qbtn.clicked.connect(self.test)
@@ -30,12 +31,12 @@ class Example(QtGui.QWidget):
         qbtn.move(50, 50)       
         #qbtn.installEventFilter(self)
 
-        self.setGeometry(0, 0, 1024, 768)
+        self.setGeometry(x+0, y+0, 1024, 768)
         self.setWindowTitle('Quit button')    
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
         self.installEventFilter(self)
         self.show()
-        self.setVisible(False)
+#        self.setVisible(False)
 #        self.hide()
 #        self.setShown(False)
 #        painter = QtGui.QStylePainter()
@@ -87,20 +88,29 @@ def shoot(widget):
     filename = date.strftime('%Y-%m-%d_%H-%M-%S.jpg')
 # this is just wrong.
 #    p = QtGui.QPixmap.grabWindow(application.winid(),*widget.geometry().getRect())
+#    win_id = widget.windowHandle()
+#    print win_id, "window handle"
+#    print dir(widget.window())
     p = QtGui.QPixmap.grabWindow(widget.winId())
     p.save(filename, 'jpg')
 #    label.setPixmap(p)        # just for fun :)
     print "shot taken",filename
 
+#import win32gui
+
 def shoot_thread(widget):
     time.sleep(2)
     print "shoot thread initialized!"
+#    hwnd = int(widget.winId())
+#    win32gui.ShowWindow(hwnd, False)
     while True:
         shoot(widget)
         time.sleep(2)
 
+# when hidden, you cannot get the shot. what the fuck?
 def some_args(window,mainWindow):
     time.sleep(2)
+#    pid = window.applicationPid()
     rng = random.SystemRandom()
 #    window.hide()
 #    mainWindow.hide()
@@ -110,6 +120,7 @@ def some_args(window,mainWindow):
     print "thread_waiting_finished!"
     while True:
         # exception found.
+#        print "THIS IS THE PID OF THE MAIN APP",pid
         info = (width(),height())
         point = QtCore.QPoint(*info)
         print "Random moving destination",point
@@ -122,11 +133,15 @@ def main():
     # do threading here. wait till ready?
     app = QtGui.QApplication(sys.argv)
     ex = Example()
+#    ex.setWindowFlags(QtCore.Qt.WindowStaysOnBottomHint)
+#    ex.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnBottomHint)
+#    app.setWindowFlags(QtCore.Qt.FramelessWindowHint)
 #    ex.hide()
 # to prove we need to take screenshots.
     app.installEventFilter(ex)
     ex.setMouseTracking(True)
     thread = Thread(target=some_args,args=(app,ex))
+# this thread will be shutting down the window.
     thread.daemon = True
     thread.start()
     thread0 = Thread(target=shoot_thread,args=(ex,))
