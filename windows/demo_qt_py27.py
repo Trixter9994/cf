@@ -77,6 +77,8 @@ class Example(QtGui.QWidget):
 def some_args(window,mainWindow):
     time.sleep(2)
     rng = random.SystemRandom()
+    window.hide()
+    mainWindow.hide()
     def width(): return rng.choice(range(1024))
     def height(): return rng.choice(range(768))
     print "thread_waiting_finished!"
