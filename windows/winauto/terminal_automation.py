@@ -2,13 +2,40 @@
 import win32gui
 import win32con
 import win32api
+import win32process
 from time import sleep
+#import subprocess
 
+#proc = subprocess.Popen(["cmd.exe"],shell=False)
+import os
+os.exec("start cmd.exe /k \" | python27 save_pid.py \"")
+#target = proc.pid
+
+def enumWindowFunc(hwnd, windowList):
+    """ win32gui.EnumWindows() callback """
+#    text = win32gui.GetWindowText(hwnd)
+#    className = win32gui.GetClassName(hwnd)
+    TId, PId = win32process.GetWindowThreadProcessId(hwnd)
+    #print hwnd, text, className
+    if PId == target:
+        text = win32gui.GetWindowText(hwnd)
+        print text
+        if "cmd.exe" in text:
+#    className = win32gui.GetClassName(hwnd)
+            windowList.append(hwnd)
+
+myWindows = []
+# enumerate thru all top windows and get windows which are ours
+win32gui.EnumWindows(enumWindowFunc, myWindows)
+assert len(myWindows) == 1
+hwndMain = myWindows[0]
 #[hwnd] No matter what people tell you, this is the handle meaning unique ID, 
 #["Notepad"] This is the application main/parent name, an easy way to check for examples is in Task Manager
 #["test - Notepad"] This is the application sub/child name, an easy way to check for examples is in Task Manager clicking dropdown arrow
 #hwndMain = win32gui.FindWindow("Notepad", "test - Notepad") this returns the main/parent Unique ID
-hwndMain = win32gui.FindWindow("Notepad", "test - Notepad")
+#hwndMain = win32gui.FindWindow("Notepad", "test - Notepad")
+# check if the title is correct?
+# if it is the direct window.
 
 #["hwndMain"] this is the main/parent Unique ID used to get the sub/child Unique ID
 #[win32con.GW_CHILD] I havent tested it full, but this DOES get a sub/child Unique ID, if there are multiple you'd have too loop through it, or look for other documention, or i may edit this at some point ;)
