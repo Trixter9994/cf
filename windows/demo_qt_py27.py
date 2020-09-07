@@ -3,6 +3,7 @@ from PyQt4 import QtGui, QtCore
 import time
 from threading import Thread
 import random
+from datetime import datetime
 '''
 def rejectExternal(event):
     if event.spontaneous():
@@ -27,7 +28,6 @@ class Example(QtGui.QWidget):
         qbtn.clicked.connect(self.test)
         qbtn.resize(qbtn.sizeHint())
         qbtn.move(50, 50)       
-        qbtn.show()
         #qbtn.installEventFilter(self)
 
         self.setGeometry(0, 0, 1024, 768)
@@ -35,6 +35,13 @@ class Example(QtGui.QWidget):
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
         self.installEventFilter(self)
         self.show()
+        self.setVisible(False)
+#        self.hide()
+#        self.setShown(False)
+#        painter = QtGui.QStylePainter()
+#        painter.begin(self)
+#        self.hide()
+#        qbtn.show()
 
     def eventFilter(self,object,event):
 	if event.type() in [QtCore.QEvent.MouseButtonPress,QtCore.QEvent.MouseButtonRelease,QtCore.QEvent.MouseButtonDblClick,QtCore.QEvent.MouseMove,QtCore.QEvent.KeyRelease,QtCore.QEvent.KeyPress,QtCore.QEvent.ShortcutOverride]:
@@ -74,11 +81,30 @@ class Example(QtGui.QWidget):
             pass
 # this one is totally black, and cannot be used for fun.
 # we shall consider some hide?
+
+def shoot(widget):
+    date = datetime.now()
+    filename = date.strftime('%Y-%m-%d_%H-%M-%S.jpg')
+# this is just wrong.
+#    p = QtGui.QPixmap.grabWindow(application.winid(),*widget.geometry().getRect())
+    p = QtGui.QPixmap.grabWindow(widget.winId())
+    p.save(filename, 'jpg')
+#    label.setPixmap(p)        # just for fun :)
+    print "shot taken",filename
+
+def shoot_thread(widget):
+    time.sleep(2)
+    print "shoot thread initialized!"
+    while True:
+        shoot(widget)
+        time.sleep(2)
+
 def some_args(window,mainWindow):
     time.sleep(2)
     rng = random.SystemRandom()
-    window.hide()
-    mainWindow.hide()
+#    window.hide()
+#    mainWindow.hide()
+# yes you can hide this.
     def width(): return rng.choice(range(1024))
     def height(): return rng.choice(range(768))
     print "thread_waiting_finished!"
@@ -96,11 +122,16 @@ def main():
     # do threading here. wait till ready?
     app = QtGui.QApplication(sys.argv)
     ex = Example()
+#    ex.hide()
+# to prove we need to take screenshots.
     app.installEventFilter(ex)
     ex.setMouseTracking(True)
     thread = Thread(target=some_args,args=(app,ex))
     thread.daemon = True
     thread.start()
+    thread0 = Thread(target=shoot_thread,args=(ex,))
+    thread0.daemon = True
+    thread0.start()
     sys.exit(app.exec_())
 
 

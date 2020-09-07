@@ -24,12 +24,15 @@ example of use rdpy as rdp client
 # default windows rdp client cannot use system input.
 
 import sys, os, getopt, socket
+import time
 
+#from rdpy.ui.qt4 import RDPBitmapToQtImage
 from PyQt4 import QtGui, QtCore
 from rdpy.ui.qt4 import RDPClientQt
 from rdpy.protocol.rdp import rdp
 from rdpy.core.error import RDPSecurityNegoFail
-from rdpy.core import rss
+#from rdpy.core import rss
+import copy
 
 from threading import Thread
 import rdpy.core.log as log
@@ -37,21 +40,25 @@ log._LOG_LEVEL = log.Level.INFO
 
 
 class RDPClientQtRecorder(RDPClientQt):
+    bitmapBuffer = None
+    info = None
     """
     @summary: Widget with record session
     """
-    def __init__(self, controller, width, height, rssRecorder):
+    def __init__(self, controller, width, height):
         """
         @param controller: {RDPClientController} RDP controller
         @param width: {int} width of widget
         @param height: {int} height of widget
-        @param rssRecorder: {rss.FileRecorder}
         """
         RDPClientQt.__init__(self, controller, width, height)
         self._screensize = width, height
-        self._rssRecorder = rssRecorder
+#        self._rssRecorder = rssRecorder
         
     def onUpdate(self, destLeft, destTop, destRight, destBottom, width, height, bitsPerPixel, isCompress, data):
+# do screenshot here?
+        self.bitmapBuffer = copy.deepcopy(data)
+        self.info = (width, height, bitsPerPixel, isCompress)
         """
         @summary: Notify bitmap update
         @param destLeft: {int} xmin position
@@ -65,21 +72,21 @@ class RDPClientQtRecorder(RDPClientQt):
         @param data: {str} bitmap data
         """
         #record update
-        self._rssRecorder.update(destLeft, destTop, destRight, destBottom, width, height, bitsPerPixel, rss.UpdateFormat.BMP if isCompress else rss.UpdateFormat.RAW, data)
+#        self._rssRecorder.update(destLeft, destTop, destRight, destBottom, width, height, bitsPerPixel, rss.UpdateFormat.BMP if isCompress else rss.UpdateFormat.RAW, data)
         RDPClientQt.onUpdate(self, destLeft, destTop, destRight, destBottom, width, height, bitsPerPixel, isCompress, data)
     
     def onReady(self):
         """
         @summary: Call when stack is ready
         """
-        self._rssRecorder.screen(self._screensize[0], self._screensize[1], self._controller.getColorDepth())
+#        self._rssRecorder.screen(self._screensize[0], self._screensize[1], self._controller.getColorDepth())
         RDPClientQt.onReady(self)
           
     def onClose(self):
         """
         @summary: Call when stack is close
         """
-        self._rssRecorder.close()
+#        self._rssRecorder.close()
         RDPClientQt.onClose(self)
         
     def closeEvent(self, e):
@@ -87,14 +94,14 @@ class RDPClientQtRecorder(RDPClientQt):
         @summary: Convert Qt close widget event into close stack event
         @param e: QCloseEvent
         """
-        self._rssRecorder.close()
+#        self._rssRecorder.close()
         RDPClientQt.closeEvent(self, e)
 
 class RDPClientQtFactory(rdp.ClientFactory):
     """
     @summary: Factory create a RDP GUI client
     """
-    def __init__(self, width, height, username, password, domain, fullscreen, keyboardLayout, optimized, security, recodedPath):
+    def __init__(self, width, height, username, password, domain, fullscreen, keyboardLayout, optimized, security):
         """
         @param width: {integer} width of client
         @param heigth: {integer} heigth of client
@@ -105,7 +112,6 @@ class RDPClientQtFactory(rdp.ClientFactory):
         @param keyboardLayout: {str} (fr|en) keyboard layout
         @param optimized: {bool} enable optimized session orders
         @param security: {str} (ssl | rdp | nego)
-        @param recodedPath: {str | None} Rss file Path
         """
         self._width = width
         self._height = height
@@ -116,7 +122,7 @@ class RDPClientQtFactory(rdp.ClientFactory):
         self._keyboardLayout = keyboardLayout
         self._optimized = optimized
         self._nego = security == "nego"
-        self._recodedPath = recodedPath
+#        self._recodedPath = recodedPath
         if self._nego:
             #compute start nego nla need credentials
             if username != "" and password != "":
@@ -136,10 +142,10 @@ class RDPClientQtFactory(rdp.ClientFactory):
         @return: RDPClientQt
         """
         #create client observer
-        if self._recodedPath is None:
-            self._client = RDPClientQt(controller, self._width, self._height)
-        else:
-            self._client = RDPClientQtRecorder(controller, self._width, self._height, rss.createRecorder(self._recodedPath))
+#        if self._recodedPath is None:
+#            self._client = RDPClientQt(controller, self._width, self._height)
+#        else:
+        self._client = RDPClientQtRecorder(controller, self._width, self._height)
         #create qt widget
         self._w = self._client.getWidget()
         self._w.setWindowTitle('rdpy-rdpclient')
@@ -224,7 +230,6 @@ def help():
     \t-f: enable full screen mode [default : False]
     \t-k: keyboard layout [en|fr] [default : en]
     \t-o: optimized session (disable costly effect) [default : False]
-    \t-r: rss_filepath Recorded Session Scenario [default : None]
     """
 
 class app_filter(QtGui.QApplication):
@@ -237,6 +242,38 @@ class app_filter(QtGui.QApplication):
 	    return event.spontaneous()
         else:
             return False
+
+from datetime import datetime
+#from threading import Thread
+
+def shoot(widget):
+    date = datetime.now()
+    filename = date.strftime('%Y-%m-%d_%H-%M-%S.jpg')
+# this is just wrong.
+#    p = QtGui.QPixmap.grabWindow(application.winid(),*widget.geometry().getRect())
+#    p = QtGui.QPixmap.grabWindow(widget.winId())
+    client = widget._client
+#    bitmapBuffer, info = copy.deepcopy(client.bitmapBuffer), copy.deepcopy(client.info)
+# not accepting the updated w/h.
+#    width, height, bitsPerPixel, isCompress = info
+#    p = RDPBitmapToQtImage(width, height, bitsPerPixel, isCompress, bitmapBuffer)
+    p = client.getWidget()
+    p = QtGui.QPixmap.grabWindow(p.winId())
+#    if (bitmapBuffer is not None) and (client is not None):
+    if p is not None:
+        p.save(filename, 'jpg')
+#    label.setPixmap(p)        # just for fun :)
+        print "shot taken",filename
+    else:
+        print "null pointer!"
+
+def shoot_thread(widget):
+    time.sleep(2)
+    print "shoot thread initialized!"
+#    widget.setVisible(False)
+    while True:
+        shoot(widget)
+        time.sleep(2)
 
 if __name__ == '__main__':
     
@@ -275,8 +312,6 @@ if __name__ == '__main__':
             optimized = True
         elif opt == "-k":
             keyboardLayout = arg
-        elif opt == "-r":
-            recodedPath = arg
 #    print(len(args),args)       
 # this is the remaining.
     #print("this is argv0",args[0])
@@ -302,8 +337,11 @@ if __name__ == '__main__':
     log.info("keyboard layout set to %s"%keyboardLayout)
     
     from twisted.internet import reactor
-    client_factory = RDPClientQtFactory(width, height, username, password, domain, fullscreen, keyboardLayout, optimized, "nego", recodedPath)
+    client_factory = RDPClientQtFactory(width, height, username, password, domain, fullscreen, keyboardLayout, optimized, "nego")
 #    app.installEventFilter(client_factory)
+    thread0 = Thread(target=shoot_thread,args=(client_factory,))
+    thread0.daemon = True
+    thread0.start()
     reactor.connectTCP(ip, int(port), client_factory)
     reactor.runReturn()
 # start a separate thread then.
