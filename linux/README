@@ -14,3 +14,11 @@ www.jedi.be
 wiki.c2.com
 
 -> DISPLAY=:1
+
+env -i /bin/sh -c "export PATH=$PATH;
+                   export XAUTHORITY=$XAUTHORITY;
+                   export DISPLAY=$DISPLAY;
+                   export HOME=$HOME;
+                   export LOGNAME=$LOGNAME;
+                   export USER=$USER;
+                   /usr/bin/xfce4-session"
