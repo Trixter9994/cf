@@ -1,0 +1,10 @@
+use virtual display, virtual framebuffer.
+
+-> xvfb. or check the headless firefox implementation.
+
+Xvfb -pixdepths 3 27 -fbdir /dev/shm/xvfb :1
+
+gnome-terminal -display :1 & echo $!
+
+xwud -in /dev/shm/xvfb/Xvfb_screen0
+
