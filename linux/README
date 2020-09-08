@@ -22,3 +22,7 @@ env -i /bin/sh -c "export PATH=$PATH;
                    export LOGNAME=$LOGNAME;
                    export USER=$USER;
                    /usr/bin/xfce4-session"
+
+xdm gdm kdm
+
+https://unix.stackexchange.com/questions/164216/remote-xfce-session-in-a-separate-console
