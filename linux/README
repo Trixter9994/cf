@@ -12,3 +12,5 @@ xwud -in /dev/shm/xvfb/Xvfb_screen0
 
 www.jedi.be
 wiki.c2.com
+
+-> DISPLAY=:1
