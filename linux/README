@@ -8,3 +8,4 @@ gnome-terminal -display :1 & echo $!
 
 xwud -in /dev/shm/xvfb/Xvfb_screen0
 
+-> xvfb-run
