@@ -90,6 +90,7 @@ GeneralUsageLister/MainIndex/*
 !*.rb
 !*.xml
 !*.cpp
+!*.ver
 !*.hpp
 ![Dd]ocker[Ff]ile
 !README
