@@ -1,0 +1,16 @@
+09-18 15:52:33.045 1848-1848/system_process D/AccessibilityManagerService: Ignoring non-encryption-aware service ComponentInfo{ai.lazero.lazero/ai.lazero.lazero.MyService}
+    Ignoring non-encryption-aware service ComponentInfo{ai.lazero.lazero/ai.lazero.lazero.m6.AcService}
+    Ignoring non-encryption-aware service ComponentInfo{ai.lazero.lazero/ai.lazero.lazero.m6.AdService}
+    Ignoring non-encryption-aware service ComponentInfo{ai.lazero.lazero/ai.lazero.lazero.m6.AeService}
+    Ignoring non-encryption-aware service ComponentInfo{biz.obake.team.touchprotector/biz.obake.team.touchprotector.tpas.TPAccessibilityService}
+    Ignoring non-encryption-aware service ComponentInfo{com.arjerine.textxposed/com.arjerine.textxposed.macro.Accessibility}
+    Ignoring non-encryption-aware service ComponentInfo{com.eg.android.AlipayGphone/com.alipay.mobile.rome.voicebroadcast.a11y.A11yService}
+    Ignoring non-encryption-aware service ComponentInfo{com.kieronquinn.app.darq/com.kieronquinn.app.darq.services.DarqBackgroundService}
+    Ignoring non-encryption-aware service ComponentInfo{com.sohu.inputmethod.sogou/com.sohu.inputmethod.flx.quicktype.QuickAccessibilityService}
+    Ignoring non-encryption-aware service ComponentInfo{com.xda.nobar/com.xda.nobar.services.Actions}
+    Ignoring non-encryption-aware service ComponentInfo{io.animal.monkey/io.animal.monkey.accessibility.EventAccessibilityService}
+09-18 15:52:27.000 1848-3323/system_process I/PackageManager.DexOptimizer: Running dexopt (dexoptNeeded=1) on: /system/priv-app/ai.lazero.lazero/base.apk pkg=ai.lazero.lazero isa=arm64 dexoptFlags=boot_complete,debuggable,public,enable_hidden_api_checks targetFilter=verify oatDir=null classLoaderContext=PCL[]
+09-18 15:52:27.002 908-1053/? V/installd: DexInv: --- BEGIN '/system/priv-app/ai.lazero.lazero/base.apk' ---
+09-18 15:52:27.070 3324-3324/? I/dex2oat: /apex/com.android.runtime/bin/dex2oat --input-vdex-fd=-1 --output-vdex-fd=11 --resolve-startup-const-strings=true --max-image-block-size=524288 --compiler-filter=verify --debuggable --classpath-dir=/system/priv-app/ai.lazero.lazero --class-loader-context=PCL[] --generate-mini-debug-info --compact-dex-level=none --compilation-reason=boot --inline-max-code-units=0
+09-18 15:52:27.884 908-1053/? V/installd: DexInv: --- END '/system/priv-app/ai.lazero.lazero/base.apk' (success) ---
+09-18 15:52:29.015 1848-3323/system_process I/BackgroundDexOptService: Pinning optimized code {ai.lazero.lazero}
