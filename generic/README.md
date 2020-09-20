@@ -11,3 +11,5 @@ You've got to find your way to it. There's simply no replacement.
 
 And by the way, it is not like teaching another person, which is a completely different story.
 It is about teaching yourself.
+
+/root/AGI/lazero/bootstrap/legacy/concentration/brainfuck/theMonkey
