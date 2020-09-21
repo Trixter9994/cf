@@ -159,7 +159,7 @@ def getSingleSession(a):
             merge_dict(t,hd)
         #phd=pdict(hd,enforce=False)
         phd=pdict(hd,enforce=True)
-        #print(phd)
+        print(phd)
             #print(t)
         '''t=tailer(dx)
         print(t)'''
