@@ -10,7 +10,7 @@ for x in sys.stdin:
     print("input: ",x)
     while (z>0):
         k=f-z
-        s=range(1,1+z)
+        s=range(1,min(maxToken,1+z))
         s=rng.choice(s)
         y=x[k:k+s]
         z-=s
