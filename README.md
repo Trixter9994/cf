@@ -4,4 +4,4 @@ This piece of work is intentionally focused on automated computer daily usage. N
 
 Contrary to the main lazero project, which is a collection of sketchy code for mindstroming and imagnation, this piece of code is focused and concise. It does not grarantee that it would find the answer, but at least it will try. Purposefully designed for code-experimentation, massive scraping, logical analyzing, reverse-engineering, and generally, hacking, it is a virtual hacker who does not need to eat or sleep.
 
-CF won't save the world. In fact, nothing will save the world. At least it tried.
+CF won't save the world. In fact, nothing will save the world. But at least it has tried.
