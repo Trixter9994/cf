@@ -23,6 +23,7 @@ def my_except_hook(exctype,value,traceback):
     sys.__excepthook__(exctype,value,traceback)
     sys.exit(0)
     # is it lethal?
+
 sys.excepthook = my_except_hook
 signal.signal(signal.SIGINT,sigint_handler)
 #signal.signal(signal.SIGKILL,sigint_handler)
@@ -40,12 +41,27 @@ def init():
     time.sleep(0.2)
     subprocess.run(["./init.sh"])
 
+def shot(sess):
+    png = virtualbox.library.BitmapFormat(541544016) 
+    res = sess.console.display.get_screen_resolution(0)
+    arr = session.console.display.take_screen_shot_to_array(0,res[0],res[1],png)
+    print("shottype: ",type(arr))
+
 """def shot(sess):
     s=sess.console.display"""
 
-t=threading.Thread(target=init)
+def shotsess(sess):
+    while True:
+        shot(sess)
+        time.sleep(1)
+
+t = threading.Thread(target=shotsess,args=(session,))
 t.setDaemon(True)
 t.start()
+
+while True:
+    print('main thread sleeping.')
+    time.sleep(2)
 # session.console.display
 # make init user and then prepare for login.
 # get_screen_resolution
@@ -60,24 +76,7 @@ t.start()
 (720, 400, 0, 0, 0, GuestMonitorStatus(1))
 >>> arr = session.console.display.take_screen_shot_to_array(0,res[0],res[1],"PNG")
 """
-guest_session = session.console.guest.create_session("tc","root")
-with open("lazero","r") as f:
-    while True:
-        r=f.readline()
-        # another process!
-        def checker(r):
-            try:
-                proc, stdout, stderr = guest_session.execute("/bin/bash", r.split())
-        # be properly decoded.
-                print(stdout)
-            except:
-                print("minor error")
-                pass
-        t0 = threading.Thread(target=checker,args=(r,))
-        t0.setDaemon(True)
-        t0.start()
-        time.sleep(0.1)
-        print(">>> visible delay?",time.time())
+#guest_session = session.console.guest.create_session("tc","root")
 #session.console.keyboard.put_keys("Hello, world!")
 # maybe a dedicated image for dos and more.
 # first we have to check how to read chars from the canvas or something.
